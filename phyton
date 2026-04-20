@@ -1,0 +1,32 @@
+import re
+ 
+def mask_sensitive(text):
+    # API keys: sk-... ou key=...
+    text = re.sub(r'\bsk-[A-Za-z0-9_\-]{10,}', '[API_KEY]', text)
+    text = re.sub(r'key=[A-Za-z0-9_\-]{6,}', 'key=[API_KEY]', text)
+ 
+    # E-mails
+    text = re.sub(r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}', '[EMAIL]', text)
+ 
+    # CPF: 000.000.000-00 ou 00000000000
+    text = re.sub(r'\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b', '[CPF]', text)
+ 
+    # CNPJ: 00.000.000/0000-00 ou 00000000000000
+    text = re.sub(r'\b\d{2}\.?\d{3}\.?\d{3}/?0001-?\d{2}\b', '[CNPJ]', text)
+ 
+    return text
+ 
+if __name__ == "__main__":
+    print("Cole o texto abaixo (pressione Enter duas vezes para finalizar):")
+    lines = []
+    while True:
+        line = input()
+        if line == "":
+            break
+        lines.append(line)
+ 
+    texto = "\n".join(lines)
+    resultado = mask_sensitive(texto)
+    print("\n--- Texto mascarado ---")
+    print(resultado)
+ 
